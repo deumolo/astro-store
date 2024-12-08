@@ -14,7 +14,7 @@ export default async function seed() {
 		id: v4(),
 		name: 'John Doe',
 		email: 'john@gmail.com',
-		password: bcrypt.hashSync('password'),
+		password: bcrypt.hashSync('1234'),
 		createdAt: new Date(),
 		role: 'admin',
 	}
@@ -22,7 +22,7 @@ export default async function seed() {
 		id: v4(),
 		name: 'Jane Doe',
 		email: 'jane@gmail.com',
-		password: bcrypt.hashSync('password'),
+		password: bcrypt.hashSync('1234'),
 		createdAt: new Date(),
 		role: 'user',
 	}
