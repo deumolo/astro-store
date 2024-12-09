@@ -9,6 +9,10 @@ const session = await getSession(Astro.request);
   {
     session ? (
       <p>Welcome {session.user?.name}</p>
+      <hr />
+      <div>
+        {JSON.stringify(session.user, null, 2)}
+      </div>
     ) : (
       <p>Not logged in</p>
     )
