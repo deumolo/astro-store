@@ -1,4 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
+import { date } from 'astro:schema';
 // import { getSession } from 'auth-astro/server';
 import { getSession } from 'auth-astro/server';
 
@@ -19,6 +20,8 @@ export const onRequest = defineMiddleware(
       locals.user = {
         email: user.email!,
         name: user.name!,
+        dateCreated : user.dateCreated!,
+        role: user.role!,
       };
       locals.isAdmin = user.role === 'admin';
     }
