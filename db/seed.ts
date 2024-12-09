@@ -30,7 +30,7 @@ export default async function seed() {
 	await db.insert(Role).values(roles);
 	await db.insert(User).values([johnDoe, janeDoe]);
 
-	const queries: any = {}
+	const queries: any = []
 
 	seedProducts.forEach(p => {
 		const product = {
