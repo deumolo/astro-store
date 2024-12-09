@@ -1,20 +1,21 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import { getSession } from 'auth-astro/server'; 
+import { getSession } from 'auth-astro/server';
 const session = await getSession(Astro.request);
+import { actions } from 'astro:actions';
+
+const { data: products, error } = await Astro.callAction(
+  actions.getProductsByPage,
+  {}
+);
+
+if (error) {
+  console.error(error);
+}
+
+console.log(products);
 ---
 
 <MainLayout>
-  <h1 class="text-3xl">Home Page</h1>
-  {
-    session ? (
-      <p>Welcome {session.user?.name}</p>
-      <hr />
-      <div>
-        {JSON.stringify(session.user, null, 2)}
-      </div>
-    ) : (
-      <p>Not logged in</p>
-    )
-  }
+  <h1 class='text-3xl'>Home Page</h1>
 </MainLayout>
