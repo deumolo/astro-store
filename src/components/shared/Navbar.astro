@@ -1,5 +1,5 @@
 ---
-const { isLoggedIn, isAdmin } = Astro.locals;
+const { isLoggedIn, user, isAdmin} = Astro.locals;
 ---
 
 <!-- component -->
@@ -10,13 +10,14 @@ const { isLoggedIn, isAdmin } = Astro.locals;
   <h1 class="text-xl text-gray-800 font-bold">
     <a href="/">AstroStore</a>
   </h1>
+
   <div class="flex items-center">
     <ul class="flex items-center space-x-6">
       <li class="font-semibold text-gray-700">
         <a href="/">Home</a>
       </li>
       {
-        isAdmin && (
+        (user && isAdmin) && (
           <li class="font-semibold text-gray-700">
             <a href="/admin/dashboard">Admin</a>
           </li>
@@ -39,12 +40,12 @@ const { isLoggedIn, isAdmin } = Astro.locals;
 </nav>
 
 <script>
-  // const { signOut } = await import('auth-astro/client');
+  const { signOut } = await import('auth-astro/client');
 
   const logoutElem = document.querySelector('#logout') as HTMLLIElement;
 
   logoutElem?.addEventListener('click', async () => {
-    // await signOut();
+    await signOut();
     window.location.href = '/';
   });
 </script>
