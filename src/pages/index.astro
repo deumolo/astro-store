@@ -3,19 +3,24 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { getSession } from 'auth-astro/server';
 const session = await getSession(Astro.request);
 import { actions } from 'astro:actions';
+import { ProductList } from '@/components/products/ProductList';
 
-const { data: products, error } = await Astro.callAction(
-  actions.getProductsByPage,
-  {}
-);
+const { data, error } = await Astro.callAction(actions.getProductsByPage, {});
 
 if (error) {
   console.error(error);
 }
 
-console.log(products);
+const { products, totalPages } = data!;
 ---
 
 <MainLayout>
   <h1 class='text-3xl'>Home Page</h1>
+  <ProductList
+    client:only='react'
+    initProducts={{
+      products,
+      totalPages,
+    }}
+  />
 </MainLayout>
