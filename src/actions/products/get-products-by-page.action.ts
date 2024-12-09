@@ -1,6 +1,7 @@
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-import { Product, db, count, eq, ProductImage } from 'astro:db';
+import { Product, db, count, eq, ProductImage, sql } from 'astro:db';
+import type { ProductWithImages } from '@/interfaces/product-with-images.interface';
 
 export const getProductsByPage = defineAction({
     accept: 'json',
@@ -22,15 +23,26 @@ export const getProductsByPage = defineAction({
                 }
             }
 
-            const products = await db
-                .select()
-                .from(Product)
-                .innerJoin(ProductImage, eq(Product.id, ProductImage.productId))
-                .limit(limit)
-                .offset((page - 1) * 12);
+            const productsQuery = sql`select a.*,
+                                    ( select GROUP_CONCAT(image,',') from 
+                                        ( select * from ${ProductImage} where productId = a.id limit 2 )
+                                    ) as images
+                                    from ${Product} a
+                                    LIMIT ${limit} OFFSET ${(page - 1) * limit};`;
+
+            const { rows } = await db.run(productsQuery);
+
+            console.log('rows', rows);
+
+            // const products = await db
+            //     .select()
+            //     .from(Product)
+            //     .innerJoin(ProductImage, eq(Product.id, ProductImage.productId))
+            //     .limit(limit)
+            //     .offset((page - 1) * 12);
 
             return {
-                products,
+                products: rows as unknown as ProductWithImages[],
                 totalPages,
             }
 
