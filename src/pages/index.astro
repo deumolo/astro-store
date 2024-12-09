@@ -1,7 +1,16 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
+import { getSession } from 'auth-astro/server'; 
+const session = await getSession(Astro.request);
 ---
 
 <MainLayout>
   <h1 class="text-3xl">Home Page</h1>
+  {
+    session ? (
+      <p>Welcome {session.user?.name}</p>
+    ) : (
+      <p>Not logged in</p>
+    )
+  }
 </MainLayout>
