@@ -17,7 +17,7 @@ const { products, totalPages } = data!;
 <MainLayout>
   <h1 class='text-3xl'>Home Page</h1>
   <ProductList
-    client:only='react'
+    client:idle
     initProducts={{
       products,
       totalPages,
