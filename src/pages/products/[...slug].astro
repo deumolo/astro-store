@@ -27,7 +27,6 @@ const { product } = data!;
   <h1>{product.title}</h1>
 
   <div class='grid grid-cols-1 md:grid-cols-3 w-full'>
-    
     <ProductSlideshow images={product.images} />
 
     <section>
@@ -36,7 +35,11 @@ const { product } = data!;
 
       <h3 class='mt-5'>Tallas</h3>
       <ul class='flex gap-3'>
-        {product.sizes}
+        {
+          product.sizes
+            .split(',')
+            .map((size) => <li data-size={size}>{size}</li>)
+        }
       </ul>
 
       <h3 class='mt-5'>Cantidad</h3>
@@ -57,6 +60,60 @@ const { product } = data!;
 
   <input type='hidden' id='product-id' value={product.id} />
 </MainLayout>
+
+<script>
+  const sizeElements = document.querySelectorAll('li');
+
+  sizeElements.forEach((sizeElement) => {
+    sizeElement.addEventListener('click', () => {
+      sizeElements.forEach((el) => el.classList.remove('selected-size'));
+      sizeElement.classList.add('selected-size');
+    });
+  });
+
+  const quantityInput = document.querySelector('input') as HTMLInputElement;
+  const productIdInput = document.querySelector(
+    '#product-id'
+  ) as HTMLInputElement;
+
+  let quantity = 1;
+
+  const [decrementBtn, incrementBtn, addToCartBtn] =
+    document.querySelectorAll('button');
+
+  decrementBtn.addEventListener('click', () => {
+    if (quantity > 1) {
+      quantity--;
+      quantityInput.value = quantity.toString();
+    }
+  });
+
+  incrementBtn.addEventListener('click', () => {
+    if (quantity < 99) {
+      quantity++;
+      quantityInput.value = quantity.toString();
+    }
+  });
+
+  addToCartBtn.addEventListener('click', () => {
+    console.log("Adding to cart...");
+    const size = document.querySelector('.selected-size')?.textContent;
+    const productId = productIdInput.value;
+
+    if (!size) {
+      alert('Selecciona una talla');
+      return;
+    }
+
+    const data = {
+      productId,
+      size,
+      quantity,
+    };
+
+    console.log(data);
+  });
+</script>
 
 <style>
   h3 {
