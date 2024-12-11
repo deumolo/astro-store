@@ -1,4 +1,5 @@
 ---
+import { CartCookiesClient } from '@/utils/cart-cookies';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { getSession } from 'auth-astro/server';
 const session = await getSession(Astro.request);
@@ -49,7 +50,8 @@ const { product } = data!;
         <button class='btn-quantity'>+</button>
       </div>
 
-      <button class='mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-slate-400'
+      <button
+        class='mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-slate-400'
         >Añadir al carrito</button
       >
 
@@ -62,6 +64,7 @@ const { product } = data!;
 </MainLayout>
 
 <script>
+  import { CartCookiesClient } from '@/utils/cart-cookies';
   const sizeElements = document.querySelectorAll('li');
 
   sizeElements.forEach((sizeElement) => {
@@ -96,7 +99,6 @@ const { product } = data!;
   });
 
   addToCartBtn.addEventListener('click', () => {
-    console.log("Adding to cart...");
     const size = document.querySelector('.selected-size')?.textContent;
     const productId = productIdInput.value;
 
@@ -113,7 +115,8 @@ const { product } = data!;
       quantity,
     };
 
-    console.log(data);
+    CartCookiesClient.addItem(data);
+    window.location.replace('/cart');
   });
 </script>
 
