@@ -4,8 +4,14 @@ import { getSession } from 'auth-astro/server';
 const session = await getSession(Astro.request);
 import { actions } from 'astro:actions';
 import { ProductList } from '@/components/products/ProductList';
+import Pagination from '@/components/shared/Pagination.astro';
 
-const { data, error } = await Astro.callAction(actions.getProductsByPage, {});
+const url = Astro.url;
+const pageParam = Number(url.searchParams.get('page')) || 1;
+
+const { data, error } = await Astro.callAction(actions.getProductsByPage, {
+  page: pageParam,
+});
 
 if (error) {
   console.error(error);
@@ -23,4 +29,6 @@ const { products, totalPages } = data!;
       totalPages,
     }}
   />
+
+  <Pagination totalPages={data?.totalPages} />
 </MainLayout>
