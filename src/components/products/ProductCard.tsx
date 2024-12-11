@@ -16,6 +16,7 @@ export const ProductCard = ({ product }: Props) => {
 
   return (
     <a
+    href={`/products/?slug=${product.slug}`}
       onMouseEnter={() => {
         setCurrentImage(images[1]);
       }}
