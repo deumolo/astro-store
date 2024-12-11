@@ -1,11 +1,35 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import { CartCookiesClient } from '@/utils/cart-cookies';
-const cart = Astro.cookies.get('cart') || [];
+import { actions } from 'astro:actions';
 
+const { data: cart, error } = await Astro.callAction(
+  actions.loadProductsFromCart,
+  {}
+);
+
+if (error || !cart) {
+  return Astro.redirect('/');
+}
 ---
 
 <MainLayout>
-  <h1>Cart page</h1>
-  <div>{JSON.stringify(cart)}</div>
+  <div>
+    {
+      cart &&
+        cart.map((product) => (
+          <div class='mb-4 flex justify-between items-center flex-1 border rounded-md p-7'>
+            <div class="flex-1">
+              <img src={product.image} alt='{product.title}' class='h-48' />
+            </div>
+            <div class="flex-1">
+              <h1>{product.title}</h1>
+              <h2>${product.price}</h2>
+              <p>Amount: {product.quantity}</p>
+              <p>Size: {product.size}</p>
+            </div>
+          </div>
+        ))
+    }
+  </div>
 </MainLayout>
