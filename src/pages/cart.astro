@@ -92,6 +92,7 @@ const total = cart.reduce(
 <script>
   import { CartCookiesClient } from '@/utils/cart-cookies';
   import { navigate } from 'astro:transitions/client';
+  import { itemsInCart } from '@/store';
 
   document.addEventListener('astro:page-load', () => {
     const deleteButtons: NodeListOf<HTMLButtonElement> =
@@ -107,11 +108,13 @@ const total = cart.reduce(
           size,
         });
 
-        CartCookiesClient.removeItem({
+        const cart = CartCookiesClient.removeItem({
           productId: productId ?? '',
           size: size ?? '',
           quantity: 1,
         });
+
+        itemsInCart.set(cart.length);
 
         navigate('/cart');
       });

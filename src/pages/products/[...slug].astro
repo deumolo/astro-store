@@ -20,22 +20,20 @@ if (error) {
 const { product } = data!;
 ---
 
-<MainLayout
-  title={product.title}
-  image={product.images}
-  description={product.description}
->
-  <h1>{product.title}</h1>
+<MainLayout title={product.title} description={product.description}>
+  <!-- image={image} -->
 
-  <div class='grid grid-cols-1 md:grid-cols-3 w-full'>
+  <!-- <h1>{product.title}</h1> -->
+
+  <div class="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
     <ProductSlideshow images={product.images} />
 
     <section>
-      <h2 class='text-2xl font-bold'>{product.title}</h2>
-      <h2 class='font-bold'>${product.price}</h2>
+      <h2 class="text-2xl font-bold">{product.title}</h2>
+      <h2 class="font-bold">${product.price}</h2>
 
-      <h3 class='mt-5'>Tallas</h3>
-      <ul class='flex gap-3'>
+      <h3 class="mt-5">Tallas</h3>
+      <ul class="flex gap-3">
         {
           product.sizes
             .split(',')
@@ -43,25 +41,26 @@ const { product } = data!;
         }
       </ul>
 
-      <h3 class='mt-5'>Cantidad</h3>
+      <h3 class="mt-5">Cantidad</h3>
       <div>
-        <button class='btn-quantity'>-</button>
-        <input type='number' min='1' value='1' />
-        <button class='btn-quantity'>+</button>
+        <button class="btn-quantity">-</button>
+        <input type="number" min="1" value="1" />
+        <button class="btn-quantity">+</button>
       </div>
 
       <button
-        class='mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-slate-400'
+        class="mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-gray-500"
         >Añadir al carrito</button
       >
 
-      <h3 class='mt-10'>Descripción</h3>
+      <h3 class="mt-10">Descripción</h3>
       <p>{product.description}</p>
     </section>
   </div>
 
-  <input type='hidden' id='product-id' value={product.id} />
+  <input type="hidden" id="product-id" value={product.id} />
 </MainLayout>
+
 
 <script>
   import { itemsInCart } from '@/store';
