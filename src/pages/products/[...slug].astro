@@ -64,6 +64,7 @@ const { product } = data!;
 </MainLayout>
 
 <script>
+  import { itemsInCart } from '@/store';
   import { CartCookiesClient } from '@/utils/cart-cookies';
   const sizeElements = document.querySelectorAll('li');
 
@@ -107,7 +108,7 @@ const { product } = data!;
       return;
     }
 
-    addToCartBtn.disabled = true;
+    // addToCartBtn.disabled = true;
 
     const data = {
       productId,
@@ -115,8 +116,11 @@ const { product } = data!;
       quantity,
     };
 
-    CartCookiesClient.addItem(data);
-    window.location.replace('/cart');
+    const cart = CartCookiesClient.addItem(data);
+
+    itemsInCart.set(cart.length);
+
+    // window.location.replace('/cart');
   });
 </script>
 
