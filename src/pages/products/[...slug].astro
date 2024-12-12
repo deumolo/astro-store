@@ -66,61 +66,66 @@ const { product } = data!;
 <script>
   import { itemsInCart } from '@/store';
   import { CartCookiesClient } from '@/utils/cart-cookies';
-  const sizeElements = document.querySelectorAll('li');
 
-  sizeElements.forEach((sizeElement) => {
-    sizeElement.addEventListener('click', () => {
-      sizeElements.forEach((el) => el.classList.remove('selected-size'));
-      sizeElement.classList.add('selected-size');
+  document.addEventListener('astro:page-load', () => {
+    const sizeElements = document.querySelectorAll('li');
+
+    sizeElements.forEach((sizeElement) => {
+      sizeElement.addEventListener('click', () => {
+        sizeElements.forEach((el) => el.classList.remove('selected-size'));
+        sizeElement.classList.add('selected-size');
+      });
     });
-  });
 
-  const quantityInput = document.querySelector('input') as HTMLInputElement;
-  const productIdInput = document.querySelector(
-    '#product-id'
-  ) as HTMLInputElement;
+    const quantityInput = document.querySelector('input') as HTMLInputElement;
+    const productIdInput = document.querySelector(
+      '#product-id'
+    ) as HTMLInputElement;
 
-  let quantity = 1;
+    let quantity = 1;
 
-  const [decrementBtn, incrementBtn, addToCartBtn] =
-    document.querySelectorAll('button');
+    const [decrementBtn, incrementBtn, addToCartBtn] =
+      document.querySelectorAll('button');
 
-  decrementBtn.addEventListener('click', () => {
-    if (quantity > 1) {
-      quantity--;
-      quantityInput.value = quantity.toString();
-    }
-  });
+    if (!decrementBtn || !incrementBtn || !addToCartBtn) return;
 
-  incrementBtn.addEventListener('click', () => {
-    if (quantity < 99) {
-      quantity++;
-      quantityInput.value = quantity.toString();
-    }
-  });
+    decrementBtn.addEventListener('click', () => {
+      if (quantity > 1) {
+        quantity--;
+        quantityInput.value = quantity.toString();
+      }
+    });
 
-  addToCartBtn.addEventListener('click', () => {
-    const size = document.querySelector('.selected-size')?.textContent;
-    const productId = productIdInput.value;
+    incrementBtn.addEventListener('click', () => {
+      if (quantity < 99) {
+        quantity++;
+        quantityInput.value = quantity.toString();
+      }
+    });
 
-    if (!size) {
-      alert('Selecciona una talla');
-      return;
-    }
+    addToCartBtn.addEventListener('click', () => {
+      const size = document.querySelector('.selected-size')?.textContent;
+      const productId = productIdInput.value;
 
-    // addToCartBtn.disabled = true;
+      if (!size) {
+        alert('Selecciona una talla');
+        return;
+      }
 
-    const data = {
-      productId,
-      size,
-      quantity,
-    };
+      // addToCartBtn.disabled = true;
 
-    const cart = CartCookiesClient.addItem(data);
+      const data = {
+        productId,
+        size,
+        quantity,
+      };
 
-    itemsInCart.set(cart.length);
+      const cart = CartCookiesClient.addItem(data);
 
-    // window.location.replace('/cart');
+      itemsInCart.set(cart.length);
+
+      // window.location.replace('/cart');
+    });
   });
 </script>
 

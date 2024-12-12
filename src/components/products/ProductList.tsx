@@ -16,7 +16,7 @@ export const ProductList = (props: Props) => {
 
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 place-items-center'>
         {props.initProducts.products.map((product: ProductWithImages) => {
-          return <ProductCard product={product} />;
+          return <ProductCard product={product} key={product.id}/>;
         })}
       </div>
     </div>
