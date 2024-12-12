@@ -26,6 +26,7 @@ export const loadProductsFromCart = defineAction({
                 const image = dbProduct?.ProductImage.image;
 
                 return {
+                    slug: dbProduct?.Product.slug,
                     size: item.size,
                     productId: item.productId,
                     quantity: item.quantity,

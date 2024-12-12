@@ -29,7 +29,7 @@ export const ProductCard = ({ product }: Props) => {
         alt={product.title}
         className='h-[350px] object-contain'
       />
-      <h4>{product.title}</h4>
+      <h4 className='min-h-11'>{product.title}</h4>
       <p>${product.price}</p>
     </a>
   );
