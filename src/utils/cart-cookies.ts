@@ -27,6 +27,8 @@ export class CartCookiesClient {
             cart.splice(itemIndex, 1);
         }
 
+        Cookies.set("cart", JSON.stringify(cart));
+        window.location.reload();
         return cart;
     }
 }
