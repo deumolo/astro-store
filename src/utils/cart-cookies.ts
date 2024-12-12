@@ -28,7 +28,6 @@ export class CartCookiesClient {
         }
 
         Cookies.set("cart", JSON.stringify(cart));
-        window.location.reload();
         return cart;
     }
 }

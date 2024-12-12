@@ -32,9 +32,9 @@ const total = cart.reduce(
           <div class='flex gap-5 mt-5 '>
             <img src={product.image} alt={product.title} class='w-20 h-20' />
 
-            <div class="flex-1">
+            <div class='flex-1'>
               <a href={`/products/?slug=${product.slug}`}>{product.title}</a>
-              <p class="mt-2">${product.price}</p>
+              <p class='mt-2'>${product.price}</p>
               <div class='flex justify-between mt-2'>
                 <div>
                   Talla: <span class='font-bold'>{product.size}</span>
@@ -44,12 +44,14 @@ const total = cart.reduce(
                 </div>
               </div>
               <button
-              data-id={product.productId}
-              data-size={product.size}
-               class='text-blue-500 btn-delete mt-2'>Remover</button>
+                data-id={product.productId}
+                data-size={product.size}
+                class='text-blue-500 btn-delete mt-2'
+              >
+                Remover
+              </button>
             </div>
           </div>
-          <hr class="mt-4"/>
         ))
       }
     </div>
@@ -88,26 +90,31 @@ const total = cart.reduce(
 </MainLayout>
 
 <script>
-import { CartCookiesClient } from "@/utils/cart-cookies";
+  import { CartCookiesClient } from '@/utils/cart-cookies';
+  import { navigate } from 'astro:transitions/client';
 
-    const deleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.btn-delete');
+  document.addEventListener('astro:page-load', () => {
+    const deleteButtons: NodeListOf<HTMLButtonElement> =
+      document.querySelectorAll('.btn-delete');
 
     deleteButtons.forEach((button) => {
-        button.addEventListener('click', async (e) => {
-            const productId = button.dataset.id;
-            const size = button.dataset.size;
-            
-            console.log({
-                productId,
-                size
-            })
+      button.addEventListener('click', async (e) => {
+        const productId = button.dataset.id;
+        const size = button.dataset.size;
 
-            CartCookiesClient.removeItem({
-                productId: productId ?? '',
-                size: size ?? '',
-                quantity:1
-            });
-
+        console.log({
+          productId,
+          size,
         });
+
+        CartCookiesClient.removeItem({
+          productId: productId ?? '',
+          size: size ?? '',
+          quantity: 1,
+        });
+
+        navigate('/cart');
+      });
     });
+  });
 </script>
