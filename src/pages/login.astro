@@ -111,7 +111,6 @@ import AuthLayout from '@/layouts/AuthLayout.astro';
       redirect: false,
     } as {});
 
-    console.log({ resp });
 
     if (resp) {
       Swal.fire({
@@ -144,7 +143,6 @@ import AuthLayout from '@/layouts/AuthLayout.astro';
       bntGoogle.innerText = 'Redireccionando...';
       window.location.replace('/protected');
     } catch (error) {
-      console.log(error);
       bntGoogle.removeAttribute('disabled');
     }
   });
