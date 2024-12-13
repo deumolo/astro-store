@@ -38,7 +38,7 @@ export default async function seed() {
 		const product = {
 			id: v4(),
 			description: p.description,
-			gender: p.description,
+			gender: p.gender,
 			price: p.price,
 			sizes: p.sizes.join(','),
 			slug: p.slug,
