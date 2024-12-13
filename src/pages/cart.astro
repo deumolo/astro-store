@@ -103,11 +103,6 @@ const total = cart.reduce(
         const productId = button.dataset.id;
         const size = button.dataset.size;
 
-        console.log({
-          productId,
-          size,
-        });
-
         const cart = CartCookiesClient.removeItem({
           productId: productId ?? '',
           size: size ?? '',

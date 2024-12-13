@@ -10,8 +10,6 @@ export const getProductBySlug = defineAction({
     }),
     handler: async ({ slug }) => {
         {
-            console.log("server action: ", slug);
-
             const productQuery = sql`select a.*,
                                     ( select GROUP_CONCAT(image,',') from 
                                         ( select * from ${ProductImage} where productId = a.id limit 2 )
@@ -20,8 +18,6 @@ export const getProductBySlug = defineAction({
                                     where a.slug = ${slug};`;
 
             const { rows } = await db.run(productQuery);
-
-            console.log('Product details: ', rows);
 
             return {
                 product: rows[0] as unknown as ProductWithImages
