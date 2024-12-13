@@ -20,8 +20,6 @@ if (error) {
 }
 
 const { products, totalPages } = data!;
-
-console.log('products: ', products);
 ---
 
 <MainLayout title='Dashboard'>
@@ -52,7 +50,7 @@ console.log('products: ', products);
             <td>
               <a
                 class='hover:underline cursor-pointer'
-                href={`/products/?slug=${product.slug}`}
+                href={`/admin/products/?slug=${product.slug}`}
                 data-astro-prefetch='load'
               >
                 {product.title}
