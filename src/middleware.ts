@@ -4,7 +4,7 @@ import { date } from 'astro:schema';
 import { getSession } from 'auth-astro/server';
 
 const notAuthenticatedRoutes = ['/login', '/register'];
-const authenticatedRoutes = ['/dashboard', '/protected'];
+const authenticatedRoutes = ['/dashboard', '/protected', '/admin/dashboard'];
 
 export const onRequest = defineMiddleware(
   async ({ url, locals, redirect, request }, next) => {
