@@ -19,13 +19,15 @@ const { product } = data!;
 ---
 
 <MainLayout title='Mantenimiento de producto'>
-  <h1>{product.title}</h1>
-  <a href='javascript:history.back()' class='text-blue-500'>← Volver</a>
+  <!-- <h1>{product.title}</h1> -->
+  <a href='/admin/dashboard' class='text-blue-500'>← Volver</a>
 
   <form class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
     <!-- Datos generales -->
     <div class='mt-2'>
       <h2 class='text-lg font-semibold'>Datos generales</h2>
+
+      <input type='hidden' id='id' name='id' value={product.id} />
 
       <!-- Titulo -->
       <div class='mb-4'>
@@ -111,6 +113,7 @@ const { product } = data!;
             class='w-full p-2 border border-gray-300 rounded'
             name='gender'
           >
+            {JSON.stringify(product.gender)}
             <option value=''>[ Seleccione ]</option>
             {
               ['men', 'women', 'unisex', 'kid'].map((gender) => (
@@ -265,11 +268,14 @@ const { product } = data!;
 </MainLayout>
 
 <script>
+  import { actions } from 'astro:actions';
+  import { navigate } from 'astro:transitions/client';
+
   document.addEventListener('astro:page-load', () => {
     const form = document.querySelector('form');
     const sizeButtons = document.querySelectorAll('.btn-size');
 
-    form?.addEventListener('submit', (e) => {
+    form?.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const selectedSizdes = Array.from(sizeButtons)
@@ -280,7 +286,16 @@ const { product } = data!;
       const formData = new FormData(form);
       formData.append('sizes', selectedSizdes);
       const formValues = Object.fromEntries(formData.entries());
-      console.log(formValues);
+
+      const { data, error } = await actions.createUpdateProduct(formData);
+      
+      if (error) {
+        return alert(error.message)
+      }
+
+      navigate(`/admin/products/?slug=${data.slug}`)
+      
+
     });
   });
 </script>
