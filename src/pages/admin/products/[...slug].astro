@@ -22,6 +22,26 @@ const { product } = data!;
   <!-- <h1>{product.title}</h1> -->
   <a href='/admin/dashboard' class='text-blue-500'>← Volver</a>
 
+  <div
+    class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-8 hidden'
+    role='alert'
+    id='alert-msg'
+  >
+    <strong class='font-bold'>Holy smokes!</strong>
+    <span class='block sm:inline'>Something seriously bad happened.</span>
+    <span class='absolute top-0 bottom-0 right-0 px-4 py-3'>
+      <svg
+        class='fill-current h-6 w-6 text-red-500'
+        role='button'
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 20 20'
+        ><title>Close</title><path
+          d='M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z'
+        ></path></svg
+      >
+    </span>
+  </div>
+
   <form class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
     <!-- Datos generales -->
     <div class='mt-2'>
@@ -36,6 +56,7 @@ const { product } = data!;
           type='text'
           id='title'
           name='title'
+          placeholder='Producto nuevo'
           value={product.title}
           class='w-full p-2 border border-gray-300 rounded'
         />
@@ -48,6 +69,7 @@ const { product } = data!;
           type='text'
           id='slug'
           name='slug'
+          placeholder='slug-nuevo'
           value={product.slug}
           class='w-full p-2 border border-gray-300 rounded'
         />
@@ -60,6 +82,7 @@ const { product } = data!;
           id='description'
           name='description'
           class='w-full p-2 border border-gray-300 rounded'
+          placeholder='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
           rows='8'>{product.description}</textarea
         >
       </div>
@@ -101,6 +124,7 @@ const { product } = data!;
           id='tags'
           name='tags'
           value={product.tags}
+          placeholder='etiqueta-1, etiqueta-2, etiqueta-3'
           class='w-full p-2 border border-gray-300 rounded'
         />
       </div>
@@ -223,9 +247,19 @@ const { product } = data!;
         </div>
 
         <!-- Slideshow -->
-        <ProductSlideshow images={product.images} />
 
-        <table class='w-full border'>
+        {
+          product.images.length > 0 && (
+            <ProductSlideshow
+              images={
+                Array.isArray(product.images)
+                  ? product.images.join(',')
+                  : product.images
+              }
+            />
+          )
+        }
+        <table class='w-full border mt-10'>
           <thead>
             <tr>
               <th>Imagen</th>
@@ -234,7 +268,10 @@ const { product } = data!;
           </thead>
           <tbody>
             {
-              product.images.split(',').map((image) => (
+              (Array.isArray(product.images)
+                ? product.images
+                : product.images.split(',')
+              ).map((image) => (
                 <tr class='border'>
                   <td class='flex justify-center'>
                     <ProductImage
@@ -286,16 +323,18 @@ const { product } = data!;
       const formData = new FormData(form);
       formData.append('sizes', selectedSizdes);
       const formValues = Object.fromEntries(formData.entries());
-
+      const alertMessage = document.querySelector('#alert-msg');
+      alertMessage?.addEventListener('click', () => {
+        alertMessage?.classList.add('hidden');
+      });
       const { data, error } = await actions.createUpdateProduct(formData);
-      
+
       if (error) {
-        return alert(error.message)
+        alertMessage?.classList.remove('hidden');
+        // return alert(error.message);
       }
 
-      navigate(`/admin/products/?slug=${data.slug}`)
-      
-
+      navigate(`/admin/products/?slug=${data.slug}`);
     });
   });
 </script>
