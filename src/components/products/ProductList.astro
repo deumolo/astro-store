@@ -1,0 +1,22 @@
+---
+import { ProductCard } from '@/components/products/ProductCard';
+import type { ProductWithImages } from '@/interfaces/product-with-images.interface';
+const { products } = Astro.props.initProducts;
+
+interface Props {
+  initProducts: {
+    products: ProductWithImages[];
+    totalPages: number;
+  };
+}
+---
+
+<div>
+  <h1>Product List</h1>
+
+  <div
+    class='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 place-items-center'
+  >
+    {products.map((product) => <ProductCard product={product} client:load />)}
+  </div>
+</div>
