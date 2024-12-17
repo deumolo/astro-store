@@ -3,7 +3,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { getSession } from 'auth-astro/server';
 const session = await getSession(Astro.request);
 import { actions } from 'astro:actions';
-import { ProductList } from '@/components/products/ProductList';
+import ProductList from '@/components/products/ProductList.astro';
 import Pagination from '@/components/shared/Pagination.astro';
 
 const url = Astro.url;
@@ -23,7 +23,6 @@ const { products, totalPages } = data!;
 <MainLayout>
   <h1 class='text-3xl'>Home Page</h1>
   <ProductList
-    client:idle
     initProducts={{
       products,
       totalPages,
