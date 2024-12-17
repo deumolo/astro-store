@@ -18,7 +18,7 @@ const path = url.pathname;
 
   <span>Página {currentPage} de {totalPages}</span>
 
-  <a class='button' href={`${path}?page=${Math.min(currentPage + 1, )}`}
+  <a class='button' href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}
     >Siguientes</a
   >
 </div>
