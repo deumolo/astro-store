@@ -4,6 +4,9 @@ import { z } from 'astro:schema';
 import { getSession } from 'auth-astro/server';
 import { v4 as UUID } from 'uuid'
 
+const MAX_IMAGE_SIZE = 5_000_000; // 5MB
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/tiff', 'image/bmp', 'image/avif'];
+
 export const createUpdateProduct = defineAction({
     accept: 'form',
     input: z.object({
@@ -17,6 +20,13 @@ export const createUpdateProduct = defineAction({
         tags: z.string(),
         title: z.string(),
         type: z.string(),
+        imageFiles: z.array(z.instanceof(File)
+            .refine(file => file.size <= MAX_IMAGE_SIZE, 'Max image size : 5mb')
+            .refine(file => {
+                if (file.size === 0) return true
+                return ACCEPTED_IMAGE_TYPES.includes(file.type)
+            }, 'Only accepted image files: ' + ACCEPTED_IMAGE_TYPES.join(','))
+        ).optional(),
     }),
     handler: async (form, { request }) => {
         {
@@ -31,7 +41,7 @@ export const createUpdateProduct = defineAction({
             }
 
 
-            const { id = UUID(), ...rest } = form;
+            const { id = UUID(), imageFiles, ...rest } = form;
             rest.slug = rest.slug.toLowerCase().replaceAll(' ', '_').trim();
 
             const product = {

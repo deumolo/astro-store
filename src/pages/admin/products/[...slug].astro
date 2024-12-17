@@ -320,21 +320,25 @@ const { product } = data!;
         .map((button) => button.textContent?.trim())
         .join(',');
 
+      
       const formData = new FormData(form);
       formData.append('sizes', selectedSizdes);
-      const formValues = Object.fromEntries(formData.entries());
+      
       const alertMessage = document.querySelector('#alert-msg');
+      
       alertMessage?.addEventListener('click', () => {
         alertMessage?.classList.add('hidden');
       });
+
       const { data, error } = await actions.createUpdateProduct(formData);
 
       if (error) {
         alertMessage?.classList.remove('hidden');
-        // return alert(error.message);
       }
 
-      navigate(`/admin/products/?slug=${data.slug}`);
+      if (data) {
+        navigate(`/admin/products/?slug=${data.slug}`);
+      }
     });
   });
 </script>
