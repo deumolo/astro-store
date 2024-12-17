@@ -40,8 +40,11 @@ export const createUpdateProduct = defineAction({
                 ...rest
             }
 
-
-            await db.update(Product).set(product).where(eq(Product.id, product.id))
+            if (!form.id) {
+                await db.insert(Product).values(product);
+            } else {
+                await db.update(Product).set(product).where(eq(Product.id, product.id));
+            }
 
 
             return product;
