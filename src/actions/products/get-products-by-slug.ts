@@ -1,6 +1,6 @@
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-import { Product, db, ProductImage, sql } from 'astro:db';
+import { Product, db, ProductImage, sql, eq } from 'astro:db';
 import type { ProductWithImages } from '@/interfaces/product-with-images.interface';
 
 const newProduct = {
@@ -10,7 +10,7 @@ const newProduct = {
     images: [],
     stock: 0,
     price: 0,
-    sizes: ['XS','S','M'],
+    sizes: ['XS', 'S', 'M'],
     slug: '',
     type: 'shirts',
     tags: [],
@@ -25,30 +25,31 @@ export const getProductBySlug = defineAction({
     }),
     handler: async ({ slug }) => {
         {
-            if(slug === 'new'){
-                return { 
+            if (slug === 'new') {
+                return {
                     product: newProduct
                 }
             }
 
-            const productQuery = sql`select a.*,
-                                    ( select GROUP_CONCAT(image,',') from 
-                                        ( select * from ${ProductImage} where productId = a.id limit 2 )
-                                    ) as images
-                                    from ${Product} a
-                                    where a.slug = ${slug};`;
+            const [product] = await db
+                .select()
+                .from(Product)
+                .where(eq(Product.slug, slug as string));
 
-            const { rows } = await db.run(productQuery);
+            if (!product) {
+                throw new Error('Product not found')
+            }
 
-            const products = rows.map(product=>{
-                return {
-                    ...product,
-                    images: product.images ? product.images : 'no-image.png'
-                }
-            })
+            const images = await db
+                .select()
+                .from(ProductImage)
+                .where(eq(ProductImage.productId, product.id));
 
             return {
-                product: products[0] as unknown as ProductWithImages
+                product: {
+                    ...product,
+                } as ProductWithImages,
+                images: images
             }
 
         }

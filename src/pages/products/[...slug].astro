@@ -17,7 +17,9 @@ if (error) {
   console.error(error);
 }
 
-const { product } = data!;
+const { product, images } = data!;
+const imagesList = images?.map((image) => image.image);
+
 ---
 
 <MainLayout title={product.title} description={product.description}>
@@ -26,7 +28,11 @@ const { product } = data!;
   <!-- <h1>{product.title}</h1> -->
 
   <div class="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
-    <ProductSlideshow images={Array.isArray(product.images) ? product.images.join(',') : product.images} />
+    {
+      imagesList?.length! > 0 && (
+        <ProductSlideshow images={imagesList!.join(',')} />
+      )
+    }
 
     <section>
       <h2 class="text-2xl font-bold">{product.title}</h2>
