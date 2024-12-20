@@ -301,11 +301,16 @@ const imagesList = images?.map((image) => image.image);
 <script>
   import { actions } from 'astro:actions';
   import { navigate } from 'astro:transitions/client';
+import type { DragEvent } from 'react';
 
   document.addEventListener('astro:page-load', () => {
     const form = document.querySelector('form');
     const sizeButtons = document.querySelectorAll('.btn-size');
     const btnDeleteImage = document.querySelectorAll('.btn-delete-image');
+    
+    const lblSelectedFiles = document.querySelector('#lbl-selected-files') as HTMLParagraphElement;
+    const dropZone = document.querySelector('#drop-zone') as HTMLLabelElement;
+    const fileInput = document.querySelector('#file-upload') as HTMLInputElement;
 
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -356,6 +361,37 @@ const imagesList = images?.map((image) => image.image);
 
       });
     });
+
+    const preventDefaults = (e:Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const highlight = (e: Event) => {
+      dropZone.classList.add('border-blue-500', 'bg-blue-50');
+    };
+
+    const unhighlight = (e: Event) => {
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+    };
+
+
+    (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, preventDefaults);
+      document.body.addEventListener(eventName, preventDefaults);
+    });
+
+    (['dragenter', 'dragover'] as const).forEach(
+      eventName => {
+        dropZone.addEventListener(eventName, highlight)
+      }
+    );
+
+    (['dragleave', 'drop'] as const).forEach(
+      eventName => {
+        dropZone.addEventListener(eventName, unhighlight)
+      }
+    );
 
   });
 </script>
