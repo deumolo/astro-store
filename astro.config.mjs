@@ -16,7 +16,6 @@ export default defineConfig({
   output: 'server',
   adapter: netlify(),
   image: {
-    // @ts-ignore
-    service: null,
+    service: 'sharp'
   },
 });
