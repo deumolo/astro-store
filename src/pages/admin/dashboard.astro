@@ -3,7 +3,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { getSession } from 'auth-astro/server';
 const session = await getSession(Astro.request);
 import { actions } from 'astro:actions';
-import { ProductList } from '@/components/products/ProductList';
+
 import Pagination from '@/components/shared/Pagination.astro';
 import { Formatter } from '@/utils/Formatter';
 import ProductImage from '@/components/products/ProductImage.astro';
